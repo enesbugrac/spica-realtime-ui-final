@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from "react";
+import { RealtimeConnection } from "@spica-devkit/bucket";
+import React, { useEffect, useRef, useState } from "react";
 import styles from "./App.module.css";
-import {
-  getReactionsRealTime,
-  updateReactionRealTime,
-} from "./services/Spica.service";
+import { getReactionsRealTime, TextItem } from "./services/Spica.service";
 // const dummyTextandEmojis = [
 //   { text: "Life", _id: "1", like: 5, dislike: 10 },
 //   { text: "Test", _id: "2", like: 5, dislike: 10 },
@@ -13,15 +11,22 @@ import {
 // ];
 
 function App() {
-  const [textItems, settextItems] = useState<
-    Array<{ _id: string; like: number; dislike: number; text: string }>
-  >([]);
+  const [textItems, settextItems] = useState<TextItem[]>([]);
+  const connection = useRef<RealtimeConnection<TextItem[]>>();
+
+  const setConnection = () => {
+    connection.current = getReactionsRealTime() as RealtimeConnection<
+      TextItem[]
+    >;
+  };
+
   useEffect(() => {
-    const connection = getReactionsRealTime().subscribe((res: any) =>
+    setConnection();
+    let subscribiton = connection.current?.subscribe((res: TextItem[]) =>
       settextItems(res)
     );
     return () => {
-      connection.unsubscribe();
+      subscribiton?.unsubscribe();
     };
   }, []);
 
@@ -33,7 +38,7 @@ function App() {
       newDoc.dislike = newDoc.dislike + 1;
     }
     console.log(newDoc);
-    updateReactionRealTime(newDoc!);
+    connection.current?.replace(newDoc!);
   };
   return (
     <div className={styles["App"]}>

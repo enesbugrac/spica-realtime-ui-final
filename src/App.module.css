@@ -1,10 +1,12 @@
-html {
+:root {
   --color-background: #bc6c25;
   --color-brown: #dda15e;
   --color-white: #fefae0;
   --color-green: #283618;
   --border-radius: 5px;
+}
 
+html {
   background-color: var(--color-background);
   color: var(--color-green);
 }
