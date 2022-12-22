@@ -1,6 +1,6 @@
 import * as Bucket from "@spica-devkit/bucket";
-const API_KEY = "f2bcj17laqlao3a";
-const BUCKET_ID = "6385cbc7ea080c002bb484ac";
+const API_KEY = "<YOUR_API_KEY>";
+const BUCKET_ID = "<YOUR_BUCKET_ID";
 export interface TextItem {
   _id: string;
   like: number;
@@ -12,7 +12,7 @@ let connection: Bucket.RealtimeConnection<TextItem[]>;
 
 function initialize() {
   Bucket.initialize({
-    publicUrl: "https://master.spicaengine.com/api",
+    publicUrl: "<YOUR_API_URL>",
     apikey: API_KEY,
   });
 }
